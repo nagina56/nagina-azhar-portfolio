@@ -1,0 +1,492 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Nagina Azhar — Portfolio design system
+   Dark charcoal base, cool blue + violet accents, soft glass surfaces.
+   ------------------------------------------------------------------ */
+
+@theme {
+  /* Surfaces, from deepest to most raised */
+  --color-ink-950: #05060a;
+  --color-ink-900: #0a0b11;
+  --color-ink-850: #0d0f16;
+  --color-ink-800: #12141d;
+  --color-ink-750: #171a24;
+  --color-ink-700: #1d2029;
+  --color-ink-600: #272b37;
+
+  /* Text */
+  --color-text: #eef0f6;
+  --color-muted: #a5adc2;
+  --color-faint: #868ea3;
+
+  /* Accents */
+  --color-accent: #6d8bff;
+  --color-accent-bright: #9db2ff;
+  --color-accent-deep: #3f5ccc;
+  --color-violet: #a855f7;
+  --color-violet-soft: #c79bfb;
+
+  --font-display: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-mono-jb), ui-monospace, "SFMono-Regular", monospace;
+
+  --radius-4xl: 1.75rem;
+  --radius-5xl: 2.25rem;
+
+  --animate-float-slow: float-slow 14s ease-in-out infinite;
+  --animate-drift: drift 22s ease-in-out infinite;
+  --animate-drift-reverse: drift-reverse 26s ease-in-out infinite;
+  --animate-spin-slow: spin 44s linear infinite;
+  --animate-caret: caret 1.15s steps(1) infinite;
+  --animate-marquee: marquee 42s linear infinite;
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -14px, 0);
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -6%, 0) scale(1.12);
+  }
+}
+
+@keyframes drift-reverse {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.08);
+  }
+  50% {
+    transform: translate3d(-5%, 5%, 0) scale(1);
+  }
+}
+
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@layer base {
+  * {
+    border-color: color-mix(in oklab, var(--color-ink-700) 80%, transparent);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--color-ink-900);
+    color: var(--color-text);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* `clip` contains decorative bleed without creating a scroll container,
+       which would otherwise break the sticky navbar. */
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-accent) 40%, transparent);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  /* Slim, unobtrusive scrollbar on desktop */
+  @media (pointer: fine) {
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--color-ink-950);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--color-ink-700);
+      border-radius: 99px;
+      border: 2px solid var(--color-ink-950);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--color-ink-600);
+    }
+  }
+}
+
+@layer components {
+  /* ---- Layout ---- */
+  .shell {
+    width: 100%;
+    max-width: 78rem;
+    margin-inline: auto;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 640px) {
+    .shell {
+      padding-inline: 1.75rem;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .shell {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* ---- Glass surfaces ---- */
+  .glass {
+    background-image: linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--color-ink-750) 88%, transparent),
+      color-mix(in oklab, var(--color-ink-900) 82%, transparent)
+    );
+    border: 1px solid color-mix(in oklab, #ffffff 9%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  .glass-soft {
+    background-image: linear-gradient(
+      160deg,
+      color-mix(in oklab, var(--color-ink-800) 72%, transparent),
+      color-mix(in oklab, var(--color-ink-900) 70%, transparent)
+    );
+    border: 1px solid color-mix(in oklab, #ffffff 7%, transparent);
+  }
+
+  /* Hairline gradient border, drawn with a mask so it can fade at the edges */
+  .ring-fade {
+    position: relative;
+  }
+
+  .ring-fade::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+      140deg,
+      color-mix(in oklab, var(--color-accent) 55%, transparent),
+      transparent 42%,
+      transparent 62%,
+      color-mix(in oklab, var(--color-violet) 45%, transparent)
+    );
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+    opacity: 0.85;
+  }
+
+  /* ---- Text treatments ---- */
+  .text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      #ffffff 0%,
+      #dfe5ff 42%,
+      var(--color-accent-bright) 78%,
+      var(--color-violet-soft) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .text-gradient-soft {
+    background-image: linear-gradient(
+      180deg,
+      #ffffff 0%,
+      #b9c2dc 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Small uppercase mono eyebrow labels */
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--color-faint);
+  }
+
+  /* ---- Buttons ---- */
+  .btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 99px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    transition:
+      transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+      background-color 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease,
+      color 220ms ease;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+  }
+
+  .btn:active {
+    transform: translateY(0);
+  }
+
+  .btn-primary {
+    background-image: linear-gradient(120deg, var(--color-accent-deep), var(--color-accent) 55%, #7f5cf0);
+    color: #ffffff;
+    box-shadow:
+      0 1px 0 0 color-mix(in oklab, #ffffff 25%, transparent) inset,
+      0 12px 30px -14px color-mix(in oklab, var(--color-accent) 75%, transparent);
+  }
+
+  .btn-primary:hover {
+    box-shadow:
+      0 1px 0 0 color-mix(in oklab, #ffffff 30%, transparent) inset,
+      0 18px 40px -14px color-mix(in oklab, var(--color-accent) 85%, transparent);
+  }
+
+  .btn-ghost {
+    background-color: color-mix(in oklab, #ffffff 4%, transparent);
+    border: 1px solid color-mix(in oklab, #ffffff 12%, transparent);
+    color: var(--color-text);
+  }
+
+  .btn-ghost:hover {
+    background-color: color-mix(in oklab, #ffffff 8%, transparent);
+    border-color: color-mix(in oklab, var(--color-accent) 45%, transparent);
+    color: #ffffff;
+  }
+
+  /* ---- Ambient background system ----
+     Deliberately low-contrast. The page content must always stay the
+     brightest thing on screen, so every value here is kept low. */
+
+  /* Base: charcoal with a soft lift behind the hero and a darker floor,
+     so the page never reads as one flat colour. */
+  .bg-charcoal {
+    background-color: var(--color-ink-900);
+    background-image:
+      radial-gradient(115% 70% at 50% -8%, rgba(38, 46, 74, 0.34) 0%, transparent 62%),
+      radial-gradient(70% 45% at 82% 4%, rgba(109, 139, 255, 0.05) 0%, transparent 70%),
+      linear-gradient(180deg, #0b0d13 0%, var(--color-ink-900) 40%, #07080d 100%);
+  }
+
+  /* Coarse 160px grid — the structural layer, gives scale and depth */
+  .bg-grid-macro {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.042) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.042) 1px, transparent 1px);
+    background-size: 160px 160px;
+  }
+
+  /* Fine 32px grid — reads as texture rather than as visible lines */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, rgba(255, 255, 255, 0.028) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255, 255, 255, 0.028) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+
+  /* Soft gradient glows. Radial gradients rather than blurred divs: the
+     falloff is already soft, so no filter pass is needed. */
+  .glow-blue {
+    background-image: radial-gradient(
+      circle at 50% 50%,
+      rgba(63, 92, 204, 0.22),
+      transparent 68%
+    );
+  }
+
+  .glow-violet {
+    background-image: radial-gradient(
+      circle at 50% 50%,
+      rgba(168, 85, 247, 0.15),
+      transparent 68%
+    );
+  }
+
+  .glow-indigo {
+    background-image: radial-gradient(
+      circle at 50% 50%,
+      rgba(109, 139, 255, 0.13),
+      transparent 70%
+    );
+  }
+
+  /* A single wide, heavily blurred horizon band — the one true blur in the
+     backdrop. Short in height, so the filter cost stays negligible. */
+  .bg-horizon {
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgba(109, 139, 255, 0.09) 32%,
+      rgba(168, 85, 247, 0.09) 68%,
+      transparent
+    );
+  }
+
+  /* Diagonal light streaks at ~1.5% white */
+  .bg-streaks {
+    background-image:
+      linear-gradient(115deg, transparent 42%, rgba(255, 255, 255, 0.016) 50%, transparent 58%),
+      linear-gradient(115deg, transparent 62%, rgba(109, 139, 255, 0.022) 68%, transparent 74%);
+  }
+
+  /* Film grain. One small tiled SVG removes the flat "screen" look that
+     pure gradients have. Kept as a plain low-opacity layer (no blend mode)
+     so it cannot force a full-screen recomposite while the glows animate. */
+  .bg-grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+    background-size: 140px 140px;
+    background-repeat: repeat;
+  }
+
+  /* Edge vignette for depth */
+  .bg-vignette {
+    background-image: radial-gradient(
+      120% 90% at 50% 35%,
+      transparent 45%,
+      rgba(3, 4, 7, 0.55) 100%
+    );
+  }
+
+  /* Fade a decorative layer out towards the edges of the page */
+  .mask-fade-y {
+    -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 78%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 78%, transparent);
+  }
+
+  /* Concentrate the line work behind the hero, then let it dissolve */
+  .mask-hero {
+    -webkit-mask-image: radial-gradient(88% 62% at 58% 16%, #000 0%, transparent 74%);
+    mask-image: radial-gradient(88% 62% at 58% 16%, #000 0%, transparent 74%);
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  }
+
+  /* ---- Slow marquee strip ---- */
+  .marquee-track {
+    display: flex;
+    width: max-content;
+    animation: var(--animate-marquee);
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  /* ---- Reveal on scroll ---- */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+      opacity 700ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 700ms cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0ms);
+  }
+
+  .reveal[data-shown="true"] {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+
+  /* ---- Form fields ---- */
+  .field {
+    width: 100%;
+    border-radius: 0.875rem;
+    background-color: color-mix(in oklab, var(--color-ink-950) 55%, transparent);
+    border: 1px solid color-mix(in oklab, #ffffff 10%, transparent);
+    padding: 0.875rem 1rem;
+    color: var(--color-text);
+    font-size: 0.9375rem;
+    transition:
+      border-color 200ms ease,
+      background-color 200ms ease,
+      box-shadow 200ms ease;
+  }
+
+  .field::placeholder {
+    color: var(--color-faint);
+  }
+
+  .field:hover {
+    border-color: color-mix(in oklab, #ffffff 16%, transparent);
+  }
+
+  .field:focus {
+    outline: none;
+    border-color: color-mix(in oklab, var(--color-accent) 60%, transparent);
+    background-color: color-mix(in oklab, var(--color-ink-950) 75%, transparent);
+    box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 14%, transparent);
+  }
+
+  .field[aria-invalid="true"] {
+    border-color: color-mix(in oklab, #f87171 65%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
